@@ -1,0 +1,13 @@
+# デフォルトは自動判定
+* text=auto
+
+# シェルスクリプトや設定ファイルは強制的にLFにする
+*.sh text eol=lf
+*.zshrc text eol=lf
+*.vimrc text eol=lf
+.vimrc text eol=lf
+_vimrc text eol=lf
+
+# Windows専用ファイルはCRLFを許容するか、LF固定にする（LFでも最近のWindowsは動きます）
+*.ps1 text eol=lf
+*.ahk text eol=lf

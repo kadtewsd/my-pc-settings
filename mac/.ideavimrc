@@ -1,0 +1,14 @@
+"" --- クリップボード共有の設定 (Mac) ---
+" y (yank) した内容を macOS のクリップボードに送ります
+set clipboard+=unnamed
+
+"" --- 既存の .vimrc の読み込み ---
+" Mac のホームディレクトリにある .vimrc を読み込みます
+source ~/.vimrc
+
+"" --- IdeaVim 特有の設定 ---
+" エディタの通知をステータスバーに表示
+set showmode
+
+" IDE 側のショートカットと衝突する場合のハンドラ設定 (必要に応じて)
+" set handler+=<C-f>:ide

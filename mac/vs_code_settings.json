@@ -1,0 +1,32 @@
+{
+    // --- Vim 拡張機能の設定 ---
+
+    // 1. システムのクリップボードと共有する設定
+    // これにより、Vim の y (yank) でコピーした内容が、他のアプリで Ctrl+V で貼り付け可能になります。
+    "vim.useSystemClipboard": true,
+
+    // 2. .vimrc / _vimrc を読み込む設定
+    "vim.usevimrc": true,
+
+    // 3. vimrc ファイルのパスを指定
+    // Windows の場合は "$HOME/_vimrc"、Mac の場合は "~/.vimrc" と記述します。
+    // ※ 共通で使う場合は、各環境のプロファイルに合わせるか、以下のように記述してください。
+    "vim.vimrc.path": "~/.vimrc",
+
+    // その他、Mac/Emacs 風の操作感を損なわないための推奨設定
+    "vim.handleKeys": {
+        "<C-f>": false, // AHKやMac標準に任せる場合は false
+        "<C-b>": false,
+        "<C-p>": false,
+        "<C-n>": false,
+        "<C-a>": false,
+        "<C-e>": false,
+        "<C-i>": false, // 文節伸縮に使うため、Vim側には渡さない
+        "<C-o>": false  // 文節伸縮に使うため、Vim側には渡さない
+    },
+
+    // 挿入モードのカーソル形状を縦棒にする（Vimの設定と合わせる）
+    "editor.cursorStyle": "line",
+    "vim.cursorStylePerMode.insert": "line",
+    "vim.cursorStylePerMode.normal": "block"
+}

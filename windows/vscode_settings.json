@@ -1,0 +1,11 @@
+{
+    "vim.useSystemClipboard": true,
+    "vim.usevimrc": true,
+    "vim.vimrc.path": "~/_vimrc",
+    "vim.cursorStylePerMode.insert": "line",
+    "vim.cursorStylePerMode.normal": "block",
+    "vim.handleKeys": {
+        "<C-f>": false,
+        "<C-b>": false
+    }
+}

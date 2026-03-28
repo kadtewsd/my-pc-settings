@@ -1,0 +1,14 @@
+"" --- クリップボード共有の設定 (Windows) ---
+" y (yank) した内容を Windows のクリップボードに送ります
+set clipboard+=unnamed
+
+"" --- 既存の _vimrc の読み込み ---
+" Windows のホームディレクトリにある _vimrc を読み込みます
+source ~/_vimrc
+
+"" --- IdeaVim 特有の設定 ---
+" エディタの通知をステータスバーに表示
+set showmode
+
+" IDE 側のショートカットと衝突する場合のハンドラ設定 (必要に応じて)
+" set handler+=<C-f>:ide

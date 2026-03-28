@@ -59,21 +59,23 @@ $OutputEncoding = [System.Text.Encoding]::UTF8
 Set-PSReadlineKeyHandler -Key Tab -ScriptBlock { 
     $line = $null; $cursor = $null
     [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
-    if ($cursor -ge $line.Length) { 
-        # カーソルが行末 → まずサジェストを受け入れ、なければ通常補完
-        $suggestion = $null
-        try {
-            [Microsoft.PowerShell.PSConsoleReadLine]::AcceptSuggestion()
-            [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$null)
-        } catch { }
-        # AcceptSuggestion で何も変わらなかった場合は TabCompleteNext にフォールバック
-        $newLine = $null
-        [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$newLine, [ref]$null)
-        if ($newLine -eq $line) {
-            [Microsoft.PowerShell.PSConsoleReadLine]::TabCompleteNext()
-        }
-    } else { 
-        # カーソルが行中 → 通常補完
-        [Microsoft.PowerShell.PSConsoleReadLine]::TabCompleteNext() 
-    } 
+    
+    # サジェスト（予測入力）が表示されているかを確認
+    $prediction = $null
+    try {
+        # 予測候補を取得して存在確認
+        $ast = $null; $tokens = $null; $errors = $null; $position = $null
+        [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$ast, [ref]$tokens, [ref]$errors, [ref]$position)
+        $lastWord = ($line -split '\s+')[-1]
+        $history = [Microsoft.PowerShell.PSConsoleReadLine]::GetHistoryItems() | 
+                   Where-Object { $_.CommandLine.StartsWith($line) } |
+                   Select-Object -First 1
+        $prediction = $history
+    } catch { }
+    
+    if ($prediction -and $cursor -ge $line.Length) {
+        [Microsoft.PowerShell.PSConsoleReadLine]::AcceptSuggestion()
+    } else {
+        [Microsoft.PowerShell.PSConsoleReadLine]::TabCompleteNext()
+    }
 }

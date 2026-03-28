@@ -46,23 +46,34 @@ function which ($name) { Get-Command $name -ErrorAction SilentlyContinue | Selec
 $psrl = Get-Module PSReadLine
 if ($psrl -and ($psrl.Version -ge [version]"2.2.0")) {
     Set-PSReadLineOption -PredictionSource History
-    
     $opt = Get-PSReadLineOption
     if ($opt | Get-Member -Name "PredictionViewStyle") {
         Set-PSReadLineOption -PredictionViewStyle InlineView
-    }
-    
-    # Tab キーの挙動: 予測がある時は AcceptSuggestion、なければ TabCompleteNext
-    Set-PSReadlineKeyHandler -Key Tab -ScriptBlock { 
-        $line = $null; $cursor = $null
-        [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
-        if ($cursor -ge $line.Length) { 
-            [Microsoft.PowerShell.PSConsoleReadLine]::AcceptSuggestion() 
-        } else { 
-            [Microsoft.PowerShell.PSConsoleReadLine]::TabCompleteNext() 
-        } 
     }
 }
 
 # --- 6. 文字コード対策 ---
 $OutputEncoding = [System.Text.Encoding]::UTF8
+
+# Tab キーの挙動: 予測がある時は AcceptSuggestion、なければ TabCompleteNext
+Set-PSReadlineKeyHandler -Key Tab -ScriptBlock { 
+    $line = $null; $cursor = $null
+    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+    if ($cursor -ge $line.Length) { 
+        # カーソルが行末 → まずサジェストを受け入れ、なければ通常補完
+        $suggestion = $null
+        try {
+            [Microsoft.PowerShell.PSConsoleReadLine]::AcceptSuggestion()
+            [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$null)
+        } catch { }
+        # AcceptSuggestion で何も変わらなかった場合は TabCompleteNext にフォールバック
+        $newLine = $null
+        [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$newLine, [ref]$null)
+        if ($newLine -eq $line) {
+            [Microsoft.PowerShell.PSConsoleReadLine]::TabCompleteNext()
+        }
+    } else { 
+        # カーソルが行中 → 通常補完
+        [Microsoft.PowerShell.PSConsoleReadLine]::TabCompleteNext() 
+    } 
+}

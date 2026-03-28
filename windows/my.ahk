@@ -1,34 +1,36 @@
 #Requires AutoHotkey v2.0
 
-; ==============================================================================
-; 除外設定 (Vim や ターミナル、IDE では AHK の介入を完全に防ぐ)
-; ==============================================================================
 SetTitleMatchMode 2
 
-; 1. プロセス名による判定 (EXE単位で確実に除外)
-GroupAdd "VimGroup", "ahk_exe nvim.exe"            ; Neovim 本体
-GroupAdd "VimGroup", "ahk_exe vim.exe"             ; Vim 本体
-GroupAdd "VimGroup", "ahk_exe Code.exe"            ; VS Code (Vim拡張のため)
-GroupAdd "VimGroup", "ahk_exe idea64.exe"          ; IntelliJ IDEA
-GroupAdd "VimGroup", "ahk_exe datagrip.exe"        ; DataGrip
-GroupAdd "VimGroup", "ahk_exe WindowsTerminal.exe" ; Windows Terminal (最優先で除外)
-GroupAdd "VimGroup", "ahk_exe pwsh.exe"            ; PowerShell 7
-GroupAdd "VimGroup", "ahk_exe powershell.exe"      ; Windows PowerShell
-
-; 2. ウィンドウタイトルによる補完的な判定
+; ==============================================================================
+; 除外グループ
+; ==============================================================================
+GroupAdd "VimGroup", "ahk_exe nvim.exe"
+GroupAdd "VimGroup", "ahk_exe vim.exe"
+GroupAdd "VimGroup", "ahk_exe Code.exe"
+GroupAdd "VimGroup", "ahk_exe idea64.exe"
+GroupAdd "VimGroup", "ahk_exe datagrip.exe"
+GroupAdd "VimGroup", "ahk_exe WindowsTerminal.exe"
+GroupAdd "VimGroup", "ahk_exe pwsh.exe"
+GroupAdd "VimGroup", "ahk_exe powershell.exe"
 GroupAdd "VimGroup", "Vim"
 GroupAdd "VimGroup", "vim"
 GroupAdd "VimGroup", "nvim"
 
 ; ==============================================================================
-; ユーティリティ
+; ターミナル内で vim が動いているかを判定するヘルパー
 ; ==============================================================================
-; Ctrl + Alt + R でスクリプトを即時リロード (修正後の反映を楽にする)
-^!r:: {
-    Reload
+IsTerminalVim() {
+    title := WinGetTitle("A")
+    ; Windows Terminal のタイトルが vim/nvim を含む場合は除外
+    return (InStr(title, "vim") || InStr(title, "nvim"))
 }
 
-; IME変換中かどうかを判定する関数
+; ==============================================================================
+; ユーティリティ
+; ==============================================================================
+^!r:: Reload
+
 IsIMEConverting() {
     try {
         hwnd := WinGetID("A")
@@ -41,37 +43,32 @@ IsIMEConverting() {
 }
 
 ; ==============================================================================
-; メイン設定: VimGroup (ターミナル等) がアクティブでない場合のみ AHK が動作
+; メイン: VimGroup でなく、かつターミナル内 vim でもない場合のみ動作
 ; ==============================================================================
-#HotIf !WinActive("ahk_group VimGroup")
+#HotIf !WinActive("ahk_group VimGroup") && !IsTerminalVim()
 
-; --- 移動系 (Mac/Emacs 風) ---
 ^f::Send "{Right}"
 ^b::Send "{Left}"
 ^p::Send "{Up}"
 ^n::Send "{Down}"
 ^a::Send "{Home}"
 ^e::Send "{End}"
-
-; --- 編集系 ---
 ^d::Send "{Delete}"
 ^h::Send "{BackSpace}"
-^k::Send "{ShiftDown}{End}{ShiftUp}{Delete}" ; カーソル以降を削除
-^u::Send "{Home}{ShiftDown}{End}{ShiftUp}{Delete}" ; 行全体を削除
+^k::Send "{ShiftDown}{End}{ShiftUp}{Delete}"
+^u::Send "{Home}{ShiftDown}{End}{ShiftUp}{Delete}"
 
-; --- IME 変換中の特殊挙動 (Ctrl + I / O) ---
 ^i:: {
     if (IsIMEConverting())
-        Send "+{Left}"  ; 変換文節を縮める
+        Send "+{Left}"
     else
         Send "{Tab}"
 }
-
 ^o:: {
     if (IsIMEConverting())
-        Send "+{Right}" ; 変換文節を伸ばす
+        Send "+{Right}"
     else
-        Send "{End}{Enter}" ; 行末で改行
+        Send "{End}{Enter}"
 }
 
 #HotIf

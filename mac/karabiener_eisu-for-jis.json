@@ -1,0 +1,15 @@
+{
+    "description": "英数: 単押し=英数, 長押し/同時押し=Command",
+    "manipulators": [
+        {
+            "from": {
+                "key_code": "japanese_eisuu",
+                "modifiers": { "optional": ["any"] }
+            },
+            "parameters": { "basic.to_if_alone_timeout_milliseconds": 500 },
+            "to": [{ "key_code": "left_command" }],
+            "to_if_alone": [{ "key_code": "japanese_eisuu" }],
+            "type": "basic"
+        }
+    ]
+}

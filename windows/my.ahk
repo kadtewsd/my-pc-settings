@@ -36,6 +36,19 @@ IsIMEConverting() {
 ^!d:: {
     MsgBox WinGetProcessName("A") . "`n" . WinGetTitle("A")
 }
+; --- IME On/Off（全アプリ共通） ---
+LAlt up:: {
+    if A_PriorKey = "LAlt"
+        Send "{vk1D}"  ; 左Alt単体 → IME OFF（英数）
+}
+RAlt up:: {
+    if A_PriorKey = "RAlt"
+        Send "{vk1C}"  ; 右Alt単体 → IME ON（かな）
+}
+
+; Alt+Tab を明示的に通す
+LAlt & Tab::Send "!{Tab}"
+RAlt & Tab::Send "!{Tab}"
 
 #HotIf !WinActive("ahk_group VimGroup") && !IsTerminalVim()
 
@@ -75,4 +88,10 @@ IsIMEConverting() {
         Send "{End}{Enter}"
 }
 
+#HotIf
+; Ctrl + - → ~
+^-::Send "~"
+
+#HotIf !WinActive("ahk_group VimGroup") && !IsTerminalVim()
++BackSpace::Send "{Delete}"
 #HotIf

@@ -1,3 +1,5 @@
+Write-Host "ctrl + shift + v is paste"
+
 # --- 1. Emacs 風キーバインドの導入と Windows 標準キーの保護 ---
 Import-Module PSReadLine
 Set-PSReadlineOption -EditMode Emacs
@@ -79,3 +81,4 @@ Set-PSReadlineKeyHandler -Key Tab -ScriptBlock {
         [Microsoft.PowerShell.PSConsoleReadLine]::TabCompleteNext()
     }
 }
+

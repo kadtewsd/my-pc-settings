@@ -179,3 +179,5 @@ set langmenu=ja_jp.utf-8
 " 縦棒とカーソルをコマンドモードと入寮モードで切り替える
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 set relativenumber
+
+nnoremap ; :

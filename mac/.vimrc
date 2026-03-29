@@ -320,3 +320,4 @@ nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearc
 
 set relativenumber!
 map <C-l> :set relativenumber!<CR>
+nnoremap ; :

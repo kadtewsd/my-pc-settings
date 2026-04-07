@@ -320,4 +320,9 @@ nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearc
 
 set relativenumber!
 map <C-l> :set relativenumber!<CR>
+
+
+" セミコロン(;) で コロン(:) の挙動（コマンド）にする
 nnoremap ; :
+" コロン(:) で セミコロン(;) の挙動（次の検索結果へ移動）にする
+nnoremap : ;

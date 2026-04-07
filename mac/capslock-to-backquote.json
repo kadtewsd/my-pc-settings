@@ -1,0 +1,25 @@
+{
+    "description": "JIS認識環境用: Caps Lock単体で Backslash、Shift併用で Tilde",
+    "manipulators": [
+        {
+            "description": "Shift + Caps Lock -> Tilde (~)",
+            "from": {
+                "key_code": "caps_lock",
+                "modifiers": { "mandatory": ["shift"] }
+            },
+            "to": [
+                {
+                    "key_code": "equal_sign",
+                    "modifiers": ["left_shift"]
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Caps Lock 単体 -> Backslash (\\)",
+            "from": { "key_code": "caps_lock" },
+            "to": [{ "key_code": "international3" }],
+            "type": "basic"
+        }
+    ]
+}

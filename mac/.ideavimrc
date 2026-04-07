@@ -1,7 +1,3 @@
-"" --- クリップボード共有の設定 (Mac) ---
-" y (yank) した内容を macOS のクリップボードに送ります
-set clipboard+=unnamed
-
 "" --- 既存の .vimrc の読み込み ---
 " Mac のホームディレクトリにある .vimrc を読み込みます
 source ~/.vimrc

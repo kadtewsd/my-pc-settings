@@ -90,7 +90,11 @@ RAlt & Tab::Send "!{Tab}"
 
 #HotIf
 ; Ctrl + - → ~
-^-::Send "~"
+; 1. Esc単体でバッククォート(`)を入力
+Esc::Send "``"
+
+; 2. Shift + Esc でチルダ(~)を入力
++Esc::Send "~"
 
 #HotIf !WinActive("ahk_group VimGroup") && !IsTerminalVim()
 +BackSpace::Send "{Delete}"

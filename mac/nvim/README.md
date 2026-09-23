@@ -219,6 +219,34 @@ Search/Replace/Files Filterを入力し、確定後カーソルを結果プレ�
 :GrugFarSync
 ```
 
+### 5. enter の補完採用
+```.sh
+touch ~/.config/nvim/lua/plugins/blink.lua
+```
+
+をして下記を追加
+
+```
+return {
+  {
+    "saghen/blink.cmp",
+    opts = {
+      keymap = {
+        preset = "default",
+        ["<Tab>"] = { "select_and_accept", "fallback" },
+      },
+      completion = {
+        list = {
+          selection = {
+            preselect = true,
+          },
+        },
+      },
+    },
+  },
+}
+```
+
 ---
 
 ### 共通トラブルシュートの型
